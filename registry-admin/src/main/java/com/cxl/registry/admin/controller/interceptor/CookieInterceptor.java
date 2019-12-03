@@ -13,7 +13,7 @@ public class CookieInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null&&request.getCookies()!=null&&request.getCookies().length>0) {
-            HashMap<String, Cookie> cookieMap=new HashMap<String, Cookie>();
+            HashMap<String, Cookie> cookieMap=new HashMap<>();
             for (Cookie cookie: request.getCookies()) {
                 cookieMap.put(cookie.getName(),cookie);
             }
