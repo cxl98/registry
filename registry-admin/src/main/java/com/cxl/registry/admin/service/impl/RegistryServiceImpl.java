@@ -86,25 +86,25 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     public ReturnT<String> update(Registry registry) {
         //valid
         if (registry.getBiz() == null || registry.getBiz().length() < 4 || registry.getBiz().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "业务格式非法[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "业务格式非法[4~255]");
         }
         if (registry.getEnv() == null || registry.getEnv().length() < 2 || registry.getEnv().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "环境格式非法[2~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "环境格式非法[2~255]");
         }
         if (registry.getKey() == null || registry.getData().length() < 4 || registry.getKey().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "注册key的格式非法[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "注册key的格式非法[4~255]");
         }
         if (registry.getData() == null || registry.getData().length() == 0) {
             registry.setData(JacksonUtil.writeValueAsString(new ArrayList<String>()));
         }
         List<String> valueList = JacksonUtil.readValue(registry.getData(), List.class);
         if (valueList != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "注册Value数据格式非法；限制为字符串数组JSON格式，如 [address,address2]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "注册Value数据格式非法；限制为字符串数组JSON格式，如 [address,address2]");
         }
         //valid exist
         Registry exist = registryDao.loadById(registry.getId());
         if (exist != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "id参数非法");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "id参数非法");
         }
 
         //if refresh
@@ -122,25 +122,25 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     public ReturnT<String> add(Registry registry) {
         //valid
         if (registry.getBiz() == null || registry.getBiz().length() < 4 || registry.getBiz().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "业务格式非法[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "业务格式非法[4~255]");
         }
         if (registry.getEnv() == null || registry.getEnv().length() < 2 || registry.getEnv().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "环境格式非法[2~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "环境格式非法[2~255]");
         }
         if (registry.getKey() == null || registry.getKey().length() < 4 || registry.getKey().length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "注册key的参数非法[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "注册key的参数非法[4~255]");
         }
         if (registry.getData() == null || registry.getData().length() == 0) {
             registry.setData(JacksonUtil.writeValueAsString(new ArrayList<String>()));
         }
         List<String> valueList = JacksonUtil.readValue(registry.getData(), List.class);
         if (valueList != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "注册Value数据格式非法；限制为字符串数组JSON格式，如 [address,address2]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "注册Value数据格式非法；限制为字符串数组JSON格式，如 [address,address2]");
         }
         //valid exist
         Registry exist = registryDao.load(registry.getBiz(), registry.getEnv(), registry.getKey());
         if (exist != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "key不能重复");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "key不能重复");
         }
         //if refresh
         int res = registryDao.add(registry);
@@ -168,28 +168,27 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     @Override
     public ReturnT<String> registry(String accessToken, String biz, String env, List<RegistryData> registryData) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "AccessToken Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
         }
         if (biz == null || biz.length() < 4 || biz.length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
         }
         if (env == null || env.length() < 2 || env.length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Env Invalid[2~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Env Invalid[2~255]");
         }
         if (registryData == null || registryData.size() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Registry Data Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Registry Data Invalid");
         }
         for (RegistryData registryData1 : registryData) {
             if (registryData1.getKey() == null || registryData1.getKey().length() < 4 || registryData1.getKey().length() > 255) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "Registry key Invalid[4~255]");
+                return new ReturnT<>(ReturnT.FAIL_CODE, "Registry key Invalid[4~255]");
             }
             if (registryData1.getValue() == null || registryData1.getValue().length() < 4 || registryData1.getValue().length() > 255) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "Registry value Invalid[4~255]");
+                return new ReturnT<>(ReturnT.FAIL_CODE, "Registry value Invalid[4~255]");
             }
         }
         // fill + add queue
-        for (RegistryData registryDatas :
-                registryData) {
+        for (RegistryData registryDatas : registryData) {
             registryDatas.setBiz(biz);
             registryDatas.setEnv(env);
         }
@@ -233,16 +232,16 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     @Override
     public ReturnT<Map<String, List<String>>> discovery(String accessToken, String biz, String env, List<String> keys) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
-            return new ReturnT<Map<String, List<String>>>(ReturnT.FAIL_CODE, "AccessToken Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
         }
         if (biz == null || biz.length() < 4 || biz.length() > 255) {
-            return new ReturnT<Map<String, List<String>>>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
         }
         if (env == null || env.length() < 4 || env.length() > 255) {
-            return new ReturnT<Map<String, List<String>>>(ReturnT.FAIL_CODE, "Env Invalid[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Env Invalid[4~255]");
         }
         if (keys == null || keys.size() == 0) {
-            return new ReturnT<Map<String, List<String>>>(ReturnT.FAIL_CODE, "Key Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Key Invalid");
         }
         Map<String, List<String>> result = new HashMap<String, List<String>>();
         for (String key :
@@ -252,14 +251,14 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
             registryData.setEnv(env);
             registryData.setKey(key);
 
-            List<String> dataList = new ArrayList<String>();
+            List<String> dataList = new ArrayList<>();
             Registry fileRegistry = getFileRegistryData(registryData);
             if (fileRegistry != null) {
                 dataList = fileRegistry.getDataList();
             }
             result.put(key, dataList);
         }
-        return new ReturnT<Map<String, List<String>>>(result);
+        return new ReturnT<>(result);
     }
 
 
