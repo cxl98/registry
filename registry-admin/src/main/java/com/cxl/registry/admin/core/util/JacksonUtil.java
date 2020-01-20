@@ -28,6 +28,7 @@ public class JacksonUtil {
 
     public static <T> T readValue(String json,Class<T> tClass){
         try {
+            System.out.println(json);
             return getInstance().readValue(json,tClass);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);

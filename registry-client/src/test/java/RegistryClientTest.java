@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RegistryClientTest {
     public static void main(String[] args) throws InterruptedException {
-        RegistryClient registryClient=new RegistryClient("http://localhost:8000/registry-admin",null,"c-rpc","test");
+        RegistryClient registryClient=new RegistryClient("http://localhost:8000/registry-admin",null,"cxxx-rpc","test");
 
         //registry test
         List<RegistryDataParamVo> registryDataList=new ArrayList<>();

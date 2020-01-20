@@ -7,7 +7,6 @@ import com.cxl.registry.admin.core.util.JacksonUtil;
 import com.cxl.registry.admin.service.IRegistryService;
 import com.cxl.registry.client.model.RegistryDataParamVo;
 import com.cxl.registry.client.model.RegistryParamVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
