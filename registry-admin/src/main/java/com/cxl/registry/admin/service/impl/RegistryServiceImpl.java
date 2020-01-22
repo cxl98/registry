@@ -61,7 +61,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         int list_count = registryDao.pageListCount(start, length, biz, env, key);
 
         //package result
-        Map<String, Object> maps = new HashMap<String, Object>();
+        Map<String, Object> maps = new HashMap<>();
         maps.put("recordsTotal", list);
         maps.put("recordsFiltered", list_count);
         maps.put("data", list);
@@ -199,23 +199,23 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     @Override
     public ReturnT<String> remove(String accessToken, String biz, String env, List<RegistryData> registryData) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "AccessToken Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
         }
         if (biz != null || biz.length() < 4 || biz.length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Biz Invalid[4~255]");
         }
         if (env != null || env.length() < 2 || env.length() > 255) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Env Invalid[2~255]");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "Env Invalid[2~255]");
         }
         if (registryData == null || registryData.size() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "RegistryData Invalid");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "RegistryData Invalid");
         }
         for (RegistryData registryData1 : registryData) {
             if (registryData1.getKey() == null || registryData1.getKey().length() < 4 || registryData1.getKey().length() > 255) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "Registry Key Invalid[4~255]");
+                return new ReturnT<>(ReturnT.FAIL_CODE, "Registry Key Invalid[4~255]");
             }
             if (registryData1.getValue() == null || registryData1.getValue().length() < 4 || registryData1.getValue().length() > 255) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "Registry Value Invalid[4~255]");
+                return new ReturnT<>(ReturnT.FAIL_CODE, "Registry Value Invalid[4~255]");
             }
         }
 
