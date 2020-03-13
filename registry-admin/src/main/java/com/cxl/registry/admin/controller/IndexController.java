@@ -57,7 +57,7 @@ public class IndexController {
 
         //param
         if (userName==null||userName.length()==0||password==null||password.length()==0) {
-            return new ReturnT<String>(500,"请输入账号密码");
+            return new ReturnT<>(500,"请输入账号密码");
         }
         boolean ifRem=(ifRemember!=null&&"on".equals(ifRemember))?true:false;
 
@@ -65,7 +65,7 @@ public class IndexController {
         try {
             boolean loginRet=PermessionInterceptor.login(response,userName,password,ifRem);
             if (!loginRet) {
-                return new ReturnT<String>(500,"账号密码错误");
+                return new ReturnT<>(500,"账号密码错误");
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

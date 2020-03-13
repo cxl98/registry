@@ -68,7 +68,7 @@ public class ApiController {
             biz=registryParamVO.getBiz();
             env=registryParamVO.getEnv();
             if (registryParamVO.getRegistryDataList() != null) {
-                registryDataList=new ArrayList<RegistryData>();
+                registryDataList=new ArrayList<>();
                 for (RegistryDataParamVo dataParamVO: registryParamVO.getRegistryDataList()) {
                     RegistryData data1=new RegistryData();
                     data1.setKey(dataParamVO.getKey());

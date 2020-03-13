@@ -295,11 +295,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         for (String key : keys) {
             String fileName = parseRegistryDataFileName(biz, env, key);
 
-            List<DeferredResult> deferredResultList = registryDeferredResultMap.get(fileName);
-            if (deferredResultList == null) {
-                deferredResultList = new ArrayList<>();
-                registryDeferredResultMap.put(fileName, deferredResultList);
-            }
+            List<DeferredResult> deferredResultList = registryDeferredResultMap.computeIfAbsent(fileName, k -> new ArrayList<>());
             deferredResultList.add(deferredResult);
         }
         return deferredResult;
@@ -360,29 +356,27 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
                     while (!executorStoped) {
                         try {
                             RegistryData registryData = registryQueue.take();
-                            if (registryData != null) {
 
-                                //refresh or add
+                            //refresh or add
 
-                                int res = registryDataDao.refresh(registryData);
-                                if (res == 0) {
-                                    registryDataDao.add(registryData);
-                                }
-
-                                //valid file status
-
-                                Registry fileRegistry = getFileRegistryData(registryData);
-                                if (fileRegistry == null) {
-                                    //go on
-                                } else if (fileRegistry.getStatus() != 0) {
-                                    continue;  //"Status limited."
-                                } else {
-                                    if (fileRegistry.getDataList().contains(registryData.getValue())) {
-                                        continue;  // "Repeated limited."
-                                    }
-                                }
-                                checkRegistryDataAndSendMessage(registryData);
+                            int res = registryDataDao.refresh(registryData);
+                            if (res == 0) {
+                                registryDataDao.add(registryData);
                             }
+
+                            //valid file status
+
+                            Registry fileRegistry = getFileRegistryData(registryData);
+                            if (fileRegistry == null) {
+                                //go on
+                            } else if (fileRegistry.getStatus() != 0) {
+                                continue;  //"Status limited."
+                            } else {
+                                if (fileRegistry.getDataList().contains(registryData.getValue())) {
+                                    continue;  // "Repeated limited."
+                                }
+                            }
+                            checkRegistryDataAndSendMessage(registryData);
                         } catch (InterruptedException e) {
                             if (!executorStoped) {
                                 LOGGER.error(e.getMessage(), e);
