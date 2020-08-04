@@ -20,7 +20,7 @@ public class RegistryController {
     private IRegistryService iRegistryService;
 
     @RequestMapping("")
-    public String index(Model model){return "registry/registry.index";}
+    public String index(){return "registry/registry.index";}
 
     @RequestMapping("/pageList")
     @ResponseBody

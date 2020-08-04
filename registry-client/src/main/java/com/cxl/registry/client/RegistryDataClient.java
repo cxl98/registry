@@ -37,7 +37,7 @@ public class RegistryDataClient {
             throw new RuntimeException("registry env is empty Invalid[2~255]");
         }
 
-        addressArr = new ArrayList<String>();
+        addressArr = new ArrayList<>();
         if (address.contains(",")) {
             addressArr.addAll(Arrays.asList(address.split(",")));
         } else {

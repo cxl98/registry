@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class PropUtil {
@@ -20,9 +21,6 @@ public class PropUtil {
 
             URL url = new File(propertyFileName).toURI().toURL();
             in = new FileInputStream(url.getPath());
-            if (in == null) {
-                return null;
-            }
             Properties prop = new Properties();
             prop.load(new InputStreamReader(in, "UTF-8"));
             return prop;
@@ -49,7 +47,7 @@ public class PropUtil {
             }
 
             fileOutputStream = new FileOutputStream(file, false);
-            properties.store(new OutputStreamWriter(fileOutputStream,"UTF-8"),null);
+            properties.store(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8),null);
             return true;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);
