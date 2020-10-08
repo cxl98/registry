@@ -9,7 +9,6 @@ import com.cxl.registry.admin.core.util.PropUtil;
 import com.cxl.registry.admin.dao.IRegistryDao;
 import com.cxl.registry.admin.dao.IRegistryDataDao;
 import com.cxl.registry.admin.dao.IRegistryMessageDao;
-import com.cxl.registry.admin.service.IRegistryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -24,8 +23,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 @Service
-public class RegistryServiceImpl implements IRegistryService, InitializingBean, DisposableBean {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryServiceImpl.class);
+public class RegistryService implements InitializingBean, DisposableBean {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryService.class);
 
 
     @Resource
@@ -54,7 +53,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
     private Map<String, List<DeferredResult>> registryDeferredResultMap = new ConcurrentHashMap<String, List<DeferredResult>>();
 
 
-    @Override
+
     public Map<String, Object> pageList(int start, int length, String biz, String env, String key) {
         //page list
         List<Registry> list = registryDao.pageList(start, length, biz, env, key);
@@ -82,7 +81,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         registryMessageDao.add(registryMessage);
     }
 
-    @Override
+
     public ReturnT<String> update(Registry registry) {
         //valid
         if (registry.getBiz() == null || registry.getBiz().length() < 4 || registry.getBiz().length() > 255) {
@@ -118,7 +117,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         return res > 0 ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
-    @Override
+
     public ReturnT<String> add(Registry registry) {
         //valid
         if (registry.getBiz() == null || registry.getBiz().length() < 4 || registry.getBiz().length() > 255) {
@@ -152,7 +151,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         return res > 0 ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
-    @Override
+
     public ReturnT<String> delete(int id) {
         Registry registry = registryDao.loadById(id);
         if (registry != null) {
@@ -164,8 +163,10 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         return ReturnT.SUCCESS;
     }
 
+    /**
+     * refresh registry-value, check update and broacase
+     */
 
-    @Override
     public ReturnT<String> registry(String accessToken, String biz, String env, List<RegistryData> registryData) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
@@ -195,8 +196,10 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         registryQueue.addAll(registryData);
         return ReturnT.SUCCESS;
     }
+    /**
+     * remove registry-value, check update and broacase
+     */
 
-    @Override
     public ReturnT<String> remove(String accessToken, String biz, String env, List<RegistryData> registryData) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
@@ -229,7 +232,7 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         return ReturnT.SUCCESS;
     }
 
-    @Override
+
     public ReturnT<Map<String, List<String>>> discovery(String accessToken, String biz, String env, List<String> keys) {
         if (this.accessToken != null && this.accessToken.length() > 0 && !this.accessToken.equals(accessToken)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, "AccessToken Invalid");
@@ -261,8 +264,10 @@ public class RegistryServiceImpl implements IRegistryService, InitializingBean, 
         return new ReturnT<>(result);
     }
 
+    /**
+     * monitor update
+     */
 
-    @Override
     public DeferredResult<ReturnT<String>> monitor(String accessToken, String biz, String env, List<String> keys) {
         //init
         DeferredResult deferredResult = new DeferredResult(30 * 1000L, new ReturnT<>(ReturnT.SUCCESS_CODE, "Monitor timeout,no key updated."));

@@ -4,7 +4,7 @@ import com.cxl.registry.admin.controller.annotation.PermessionLimit;
 import com.cxl.registry.admin.core.model.RegistryData;
 import com.cxl.registry.admin.core.result.ReturnT;
 import com.cxl.registry.admin.core.util.JacksonUtil;
-import com.cxl.registry.admin.service.IRegistryService;
+import com.cxl.registry.admin.service.impl.RegistryService;
 import com.cxl.registry.client.model.RegistryDataParamVo;
 import com.cxl.registry.client.model.RegistryParamVO;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiController {
     @Resource
-    private IRegistryService registryService;
+    private RegistryService registryService;
 
     /**
      * 地址格式：{服务注册中心跟地址}/registry
